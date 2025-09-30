@@ -1,13 +1,20 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+import os 
 from flask_scss import Scss
 from datetime import datetime, timezone
 
 app= Flask(__name__)
 Scss(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+db_url = os.environ.get("DATABASE_URL", "sqlite:///instance/site.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
 class MyTask(db.Model):
